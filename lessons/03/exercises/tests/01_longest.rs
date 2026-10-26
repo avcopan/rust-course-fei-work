@@ -2,6 +2,13 @@
 
 // TODO: Implement a function called `longest`, which will return the longer of the two
 // input strings. If they are the same length, return the first string.
+fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
+    if s1.chars().count() < s2.chars().count() {
+        s2
+    } else {
+        s1
+    }
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
