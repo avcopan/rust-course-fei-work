@@ -4,6 +4,35 @@
 // Use field names `x`, `y` and `z`.
 // Implement `new`, `add`, `length` and `normalize` methods, so that tests pass.
 // If you `normalize` a vector that has length 0, it should return a zero-length vector.
+#[derive(Debug, Clone, Copy)]
+struct Vec3 {
+    x: f64,
+    y: f64,
+    z: f64,
+}
+
+impl Vec3 {
+    fn new(x: f64, y: f64, z: f64) -> Self {
+        Self { x, y, z }
+    }
+
+    fn add(self, other: Self) -> Self {
+        Self::new(self.x + other.x, self.y + other.y, self.z + other.z)
+    }
+
+    fn length(self) -> f64 {
+        (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+    }
+
+    fn normalize(self) -> Self {
+        let len = self.length();
+        if len == 0.0 {
+            self
+        } else {
+            Self::new(self.x / len, self.y / len, self.z / len)
+        }
+    }
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
