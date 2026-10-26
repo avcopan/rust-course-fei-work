@@ -24,6 +24,66 @@
 //
 // Hint: Put `#[derive(Debug, Eq, PartialEq)]` on top of `SRL` and `SRLValidationError`,
 // so that asserts in tests work.
+pub mod srl {
+    #[derive(Debug, Eq, PartialEq)]
+    pub struct SRL {
+        protocol: Option<String>,
+        address: String,
+    }
+
+    #[derive(Debug, Eq, PartialEq)]
+    pub enum SRLValidationError {
+        EmptyProtocol,
+        EmptyAddress,
+        InvalidCharacterInProtocol(char),
+        InvalidCharacterInAddress(char),
+    }
+
+    fn first_nonalpha(s: &str) -> Option<char> {
+        s.chars().find(|c| !c.is_ascii_lowercase())
+    }
+
+    impl SRL {
+        pub fn new(input: &str) -> Result<Self, SRLValidationError> {
+            let (protocol, address) = match input.split_once("://") {
+                Some((p, a)) => (Some(p), a),
+                None => (None, input),
+            };
+
+            match protocol {
+                Some("") => return Err(SRLValidationError::EmptyProtocol),
+                Some(s) => {
+                    if let Some(c) = first_nonalpha(&s) {
+                        return Err(SRLValidationError::InvalidCharacterInProtocol(c));
+                    }
+                }
+                _ => {}
+            }
+
+            match address {
+                "" => return Err(SRLValidationError::EmptyAddress),
+                s => {
+                    if let Some(c) = first_nonalpha(&s) {
+                        return Err(SRLValidationError::InvalidCharacterInAddress(c));
+                    }
+                }
+            }
+
+            Ok(Self {
+                protocol: protocol.map(str::to_owned),
+                address: address.to_owned(),
+            })
+        }
+
+        pub fn get_address(&self) -> &str {
+            &self.address
+        }
+
+        pub fn get_protocol(&self) -> Option<&str> {
+            self.protocol.as_deref()
+        }
+    }
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
