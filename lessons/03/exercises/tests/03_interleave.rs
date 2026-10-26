@@ -9,6 +9,47 @@
 //
 // Hint: you can use `string.chars()` to create an iterator over the Unicode characters of a string.
 
+// // When a function creates a string internally, you just pass back the string
+// // itself and it gets moved out with no copy
+// // First solution:
+// use std::cmp;
+// fn interleave<'a>(s1: &str, s2: &str) -> String {
+//     let mut iter1 = s1.chars();
+//     let mut iter2 = s2.chars();
+
+//     let mut s = String::new();
+
+//     for _ in 0..cmp::max(s1.len(), s2.len()) {
+//         if let Some(c1) = iter1.next() {
+//             s.push(c1);
+//         };
+//         if let Some(c2) = iter2.next() {
+//             s.push(c2);
+//         };
+//     }
+
+//     s
+// }
+
+// Better solution:
+fn interleave(s1: &str, s2: &str) -> String {
+    let mut iter1 = s1.chars();
+    let mut iter2 = s2.chars();
+
+    let mut s = String::new();
+    loop {
+        match (iter1.next(), iter2.next()) {
+            (None, None) => break,
+            (c1, c2) => {
+                s.extend(c1);
+                s.extend(c2);
+            }
+        }
+    }
+
+    s
+}
+
 /// Below you can find a set of unit tests.
 #[cfg(test)]
 mod tests {
