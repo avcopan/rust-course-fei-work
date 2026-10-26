@@ -26,10 +26,19 @@ fn merge_slices(v1: &[u32], v2: &[u32]) -> Vec<u32> {
     v
 }
 
+fn merge_sort(v: &[u32]) -> Vec<u32> {
+    if v.len() <= 1 {
+        return v.to_vec();
+    }
+
+    let (v1, v2) = v.split_at(v.len() / 2);
+    merge_slices(&merge_sort(v1), &merge_sort(v2))
+}
+
 /// Below you can find a set of unit tests.
 #[cfg(test)]
 mod tests {
-    use crate::merge_slices;
+    use crate::{merge_slices, merge_sort};
 
     #[test]
     fn merge_slices_empty() {
@@ -67,5 +76,38 @@ mod tests {
     #[test]
     fn merge_slices_second_empty() {
         assert_eq!(merge_slices(&[1, 9, 11], &[]), vec![1, 9, 11]);
+    }
+
+    #[test]
+    fn merge_sort_empty() {
+        assert_eq!(merge_sort(&[]), vec![]);
+    }
+
+    #[test]
+    fn merge_sort_single() {
+        assert_eq!(merge_sort(&[7]), vec![7]);
+    }
+
+    #[test]
+    fn merge_sort_already_sorted() {
+        assert_eq!(merge_sort(&[1, 2, 3, 4, 5]), vec![1, 2, 3, 4, 5]);
+    }
+
+    #[test]
+    fn merge_sort_reversed() {
+        assert_eq!(merge_sort(&[5, 4, 3, 2, 1]), vec![1, 2, 3, 4, 5]);
+    }
+
+    #[test]
+    fn merge_sort_duplicates() {
+        assert_eq!(merge_sort(&[3, 1, 3, 2, 1, 3]), vec![1, 1, 2, 3, 3, 3]);
+    }
+
+    #[test]
+    fn merge_sort_matches_std_sort() {
+        let v = [38, 27, 43, 3, 9, 82, 10, 0, 27, 55, 1, 99, 64, 3, 18];
+        let mut expected = v.to_vec();
+        expected.sort_unstable();
+        assert_eq!(merge_sort(&v), expected);
     }
 }
