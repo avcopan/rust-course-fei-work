@@ -14,6 +14,26 @@
 // Hint: there is a useful basic data structure that can be used for checking parentheses equality.
 // It rhymes with "Jack" :)
 // You don't even need to implement it fully, just use Vec and perform two operations on it.
+fn matching_opener(close: char) -> Option<char> {
+    match close {
+        ')' => Some('('),
+        ']' => Some('['),
+        '}' => Some('{'),
+        _ => None,
+    }
+}
+
+fn match_parentheses(s: &str) -> bool {
+    let mut stack: Vec<char> = Vec::new();
+    for c in s.chars() {
+        match c {
+            p @ ('(' | '[' | '{') => stack.push(p),
+            p @ (')' | ']' | '}') if stack.pop() != matching_opener(p) => return false,
+            _ => (),
+        }
+    }
+    stack.is_empty()
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
