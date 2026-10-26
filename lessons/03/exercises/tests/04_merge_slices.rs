@@ -8,6 +8,24 @@
 //!
 //! Bonus: Can you build a complete merge sort on top of this function? :)
 
+fn merge_slices(v1: &[u32], v2: &[u32]) -> Vec<u32> {
+    let mut iter1 = v1.iter().peekable();
+    let mut iter2 = v2.iter().peekable();
+
+    let mut v: Vec<u32> = Vec::with_capacity(v1.len() + v2.len());
+    loop {
+        match (iter1.peek(), iter2.peek()) {
+            (Some(x1), Some(x2)) if x1 <= x2 => v.extend(iter1.next()),
+            (Some(_), Some(_)) => v.extend(iter2.next()),
+            _ => break,
+        }
+    }
+    v.extend(iter1);
+    v.extend(iter2);
+
+    v
+}
+
 /// Below you can find a set of unit tests.
 #[cfg(test)]
 mod tests {
