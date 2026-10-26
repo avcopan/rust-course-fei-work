@@ -1,6 +1,21 @@
 //! Run this file with `cargo test --test 01_factorial`.
 
-// TODO: Implement a simple factorial function.
+// // Initial solution:
+// fn factorial(num: u32) -> u32 {
+//     if num == 0 {
+//         return 1;
+//     }
+
+//     let mut val = num;
+//     for i in 1..num {
+//         val *= num - i;
+//     }
+//     val
+// }
+
+fn factorial(num: u32) -> u32 {
+    (1..=num).product()
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
