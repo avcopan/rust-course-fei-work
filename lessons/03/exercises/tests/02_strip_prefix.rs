@@ -7,6 +7,17 @@
 //
 // Hint: you can use `string.chars()` for iterating the Unicode characters of a string.
 
+// // Using `str.find()`
+// fn strip_prefix<'a>(needle: &'a str, prefix: &str) -> &'a str {
+//     let start = needle.find(|c| !prefix.contains(c)).unwrap_or(needle.len());
+//     &needle[start..]
+// }
+
+// Using `str.trim_start_matches()`
+fn strip_prefix<'a>(needle: &'a str, prefix: &str) -> &'a str {
+    needle.trim_start_matches(|c| prefix.contains(c))
+}
+
 /// Below you can find a set of unit tests.
 #[cfg(test)]
 mod tests {
@@ -39,7 +50,7 @@ mod tests {
         let result = strip_prefix(needle, &prefix);
         // TODO: Uncomment the `drop(prefix)` line.
         // Does the test still work? If not, fix `strip_prefix`!
-        // drop(prefix);
+        drop(prefix);
         assert_eq!(result, "oobar");
     }
 }
