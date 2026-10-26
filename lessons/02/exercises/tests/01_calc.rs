@@ -9,6 +9,20 @@
 // (see tests) that receives a single `i32` number and the enum, which represents which
 // operation should be performed on it.
 // Hint: max(..) and min(..) methods of `i32` might come in handy.
+#[non_exhaustive]
+enum Op {
+    Add(i32),
+    Sub(i32),
+    Clamp { low: i32, high: i32 },
+}
+
+fn perform_calculation(number: i32, op: Op) -> i32 {
+    match op {
+        Op::Add(n) => number + n,
+        Op::Sub(n) => number - n,
+        Op::Clamp { low, high } => number.max(low).min(high),
+    }
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
