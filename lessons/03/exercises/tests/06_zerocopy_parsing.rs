@@ -23,6 +23,60 @@
 //
 // The format of the ticket is `<movie-name>;<day>;<visitor-name>`. The second semicolon is optional
 // when the visitor name is missing. There must not be any trailing data in the input string.
+#[derive(Debug, Clone, Copy)]
+pub enum Day {
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Ticket<'a> {
+    pub movie: &'a str,
+    pub day: Day,
+    pub visitor: Option<&'a str>,
+}
+
+fn parse_day(s: &str) -> Option<Day> {
+    match s {
+        s if s.eq_ignore_ascii_case("monday") => Some(Day::Monday),
+        s if s.eq_ignore_ascii_case("tuesday") => Some(Day::Tuesday),
+        s if s.eq_ignore_ascii_case("wednesday") => Some(Day::Wednesday),
+        s if s.eq_ignore_ascii_case("thursday") => Some(Day::Thursday),
+        s if s.eq_ignore_ascii_case("friday") => Some(Day::Friday),
+        s if s.eq_ignore_ascii_case("saturday") => Some(Day::Saturday),
+        s if s.eq_ignore_ascii_case("sunday") => Some(Day::Sunday),
+        _ => None,
+    }
+}
+
+fn is_valid_name(s: &str) -> bool {
+    !s.is_empty() && s.chars().all(|c| c.is_ascii_alphanumeric() || c == ' ')
+}
+
+fn parse_ticket(input: &str) -> Option<Ticket<'_>> {
+    let mut split = input.splitn(3, ';');
+
+    let movie = split.next().filter(|s| is_valid_name(s))?;
+
+    let day = split.next().and_then(parse_day)?;
+
+    let visitor = match split.next() {
+        None | Some("") => None,
+        Some(s) if is_valid_name(s) => Some(s),
+        Some(_) => return None,
+    };
+
+    Some(Ticket {
+        movie,
+        day,
+        visitor,
+    })
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
