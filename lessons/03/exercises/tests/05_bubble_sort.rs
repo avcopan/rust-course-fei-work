@@ -2,6 +2,36 @@
 
 // TODO: Write a simple bubble sort implementation that receives a unique (mutable) reference
 // to a slice of numbers and sorts them in-place.
+fn bubble_sort<T: PartialOrd>(items: &mut [T]) {
+    for end in (1..items.len()).rev() {
+        let mut swapped = false;
+        for i in 0..end {
+            if items[i] > items[i + 1] {
+                items.swap(i, i + 1);
+                swapped = true;
+            }
+        }
+
+        if !swapped {
+            break;
+        }
+    }
+}
+
+// // First attempt:
+// fn bubble_sort(items: &mut [i64]) {
+//     let mut not_done = true;
+//     while not_done {
+//         not_done = false;
+//         for j in 1..items.len() {
+//             let i = j - 1;
+//             if items[i] > items[j] {
+//                 items.swap(i, j);
+//                 not_done = true;
+//             }
+//         }
+//     }
+// }
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
