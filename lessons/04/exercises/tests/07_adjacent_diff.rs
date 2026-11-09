@@ -9,6 +9,12 @@
 //!
 //! The iterator has to be **lazy**! It should not copy the whole input array
 //! (in other words, it should have space complexity O(1)).
+fn adjacent_diff(items: &[i32]) -> impl Iterator<Item = i32> + '_ {
+    items
+        .iter()
+        .zip(items.iter().skip(1))
+        .map(|(i0, i1)| i1 - i0)
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
