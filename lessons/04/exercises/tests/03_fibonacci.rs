@@ -3,6 +3,7 @@
 //! TODO: Implement a struct called `Fibonacci`, which implements `Iterator` that iterates through
 //! Fibonacci numbers (starting from 0).
 //! `Fibonacci` should implement the `Default` trait.
+// Solution 1: The long way (struct + Iterator trait)
 struct Fibonacci {
     current: u64,
     next: u64,
@@ -29,9 +30,24 @@ impl Iterator for Fibonacci {
     }
 }
 
+// Solution 2: One-liner using std::iter::successors
+pub fn fibonacci() -> impl Iterator<Item = u64> {
+    // Defines iterator over a, b pairs that scans the Fibonacci sequence, then
+    // maps onto the first value of each
+    // // Version A: Stops one early...
+    // std::iter::successors(Some((0u64, 1u64)), |&(a, b)| Some((b, a.checked_add(b)?)))
+    //     .map(|(a, _)| a)
+    // Version B: Stops at the last u64 value
+    std::iter::successors(Some((0u64, Some(1u64))), |&(a, b)| {
+        b.map(|b| (b, a.checked_add(b)))
+    })
+    .map(|(a, _)| a)
+}
+
 /// Below you can find a set of unit tests.
 #[cfg(test)]
 mod tests {
+    use crate::fibonacci;
     use crate::Fibonacci;
 
     #[test]
@@ -55,5 +71,13 @@ mod tests {
     #[test]
     fn fibonacci_sixty() {
         assert_eq!(Fibonacci::default().nth(59), Some(956722026041));
+    }
+
+    #[test]
+    fn successors_ten() {
+        assert_eq!(
+            fibonacci().take(10).collect::<Vec<_>>(),
+            vec![0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+        );
     }
 }
