@@ -3,7 +3,53 @@
 //! TODO: Create a trait `Shape` with methods for calculating the area and perimeter of a geometrical
 //! object. Then create two simple geometrical objects (`Rectangle` and `Circle`) and implement
 //! the `Shape` trait for both of them.
+use std::f64::consts::PI;
 
+pub trait Shape {
+    fn area(&self) -> f64;
+    fn perimeter(&self) -> f64;
+}
+
+pub struct Rectangle {
+    height: f64,
+    width: f64,
+}
+
+impl Rectangle {
+    pub fn new(height: f64, width: f64) -> Self {
+        Self { height, width }
+    }
+}
+
+impl Shape for Rectangle {
+    fn area(&self) -> f64 {
+        self.height * self.width
+    }
+
+    fn perimeter(&self) -> f64 {
+        2.0 * self.height + 2.0 * self.width
+    }
+}
+
+pub struct Circle {
+    radius: f64,
+}
+
+impl Circle {
+    pub fn new(radius: f64) -> Self {
+        Self { radius }
+    }
+}
+
+impl Shape for Circle {
+    fn area(&self) -> f64 {
+        PI * self.radius * self.radius
+    }
+
+    fn perimeter(&self) -> f64 {
+        2.0 * PI * self.radius
+    }
+}
 
 /// Below you can find a set of unit tests.
 #[cfg(test)]
